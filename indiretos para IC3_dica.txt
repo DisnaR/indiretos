@@ -1,0 +1,71 @@
+import pandas as pd
+import os
+import glob
+from datetime import datetime
+
+def main():
+    # Define o caminho da pasta Downloads do usuário atual
+    pasta_downloads = os.path.join(os.environ['USERPROFILE'], 'Downloads')
+
+    # Encontra todos os arquivos .txt na pasta Downloads
+    caminho_arquivos = os.path.join(pasta_downloads, '*.txt')
+    arquivos_txt = glob.glob(caminho_arquivos)
+
+    # Lista para armazenar os DataFrames
+    dataframes = []
+
+    # Verifica se há arquivos .txt
+    if not arquivos_txt:
+        print("Nenhum arquivo .txt encontrado.")
+        return
+
+    # Lê cada arquivo TXT e tenta diagnosticar a estrutura
+    for arquivo in arquivos_txt:
+        try:
+            # Lê o arquivo, ignorando as primeiras 4 linhas e sem especificar nomes de colunas
+            df = pd.read_csv(arquivo, delimiter='|', encoding='utf-8', skiprows=4, header=None)
+            # Mostra como os dados estão organizados
+            print(f"Estrutura do arquivo {arquivo}:")
+            print(df.head())
+            dataframes.append(df)
+        except pd.errors.ParserError as e:
+            print(f"Erro ao processar o arquivo {arquivo}: {e}")
+        except Exception as e:
+            print(f"Erro desconhecido ao processar o arquivo {arquivo}: {e}")
+
+    # Não realizar concatenação ou salvar, apenas diagnóstico
+    if not dataframes:
+        print("Nenhum DataFrame válido foi criado. Verifique os arquivos de entrada.")
+
+if __name__ == "__main__":
+    main()
+
+
+PS C:\Users\disna\OneDrive\Documents\Unilever\Indiretos> python indiretos.py
+Estrutura do arquivo C:\Users\disna\Downloads\Email001Attach001_J_1BTXIC3.TXT:
+    0           1            2         3      4         5     6    7   8   9     10   11  ...          14          15        16        17 18   19         20        21        22          23          24  25
+0  NaN  22.04.2024  ARAUJO_F012  19:21:04  SM30   SAPMSVMA  Old   BR   MG  SP  21.0  0.0  ...  08.04.2021  31.12.9999    12,00    100,00      X64                0,00      0,00                          NaN
+1  NaN  22.04.2024  ARAUJO_F012  19:21:04  SM30   SAPMSVMA  new   BR   MG  SP  21.0  0.0  ...  08.04.2021  30.04.2024    12,00    100,00      X64                0,00      0,00                          NaN
+2  NaN  22.04.2024  ARAUJO_F012  19:21:39  SM30   SAPMSVMA  Old   BR   MG  SP  21.0  0.0  ...  08.04.2021  31.12.9999    12,00    100,00      X64                0,00      0,00                          NaN
+3  NaN  22.04.2024  ARAUJO_F012  19:21:39  SM30   SAPMSVMA  new   BR   MG  SP  21.0  0.0  ...  08.04.2021  30.04.2024    12,00    100,00      X64                0,00      0,00                          NaN
+4  NaN  22.04.2024  ARAUJO_F012  19:22:14  SM30   SAPMSVMA  Old   BR   MG  SP  21.0  0.0  ...  08.04.2021  31.12.9999    12,00    100,00      X64                0,00      0,00                          NaN
+
+[5 rows x 26 columns]
+Estrutura do arquivo C:\Users\disna\Downloads\Email002Attach001_J_1BTXIC3.TXT:
+    0           1            2         3      4         5     6    7   8   9     10   11  ...          14          15        16        17 18   19         20        21        22          23          24  25
+0  NaN  22.04.2024  ARAUJO_F012  19:21:04  SM30   SAPMSVMA  Old   BR   MG  SP  21.0  0.0  ...  08.04.2021  31.12.9999    12,00    100,00      X64                0,00      0,00                          NaN    
+1  NaN  22.04.2024  ARAUJO_F012  19:21:04  SM30   SAPMSVMA  new   BR   MG  SP  21.0  0.0  ...  08.04.2021  30.04.2024    12,00    100,00      X64                0,00      0,00                          NaN    
+2  NaN  22.04.2024  ARAUJO_F012  19:21:39  SM30   SAPMSVMA  Old   BR   MG  SP  21.0  0.0  ...  08.04.2021  31.12.9999    12,00    100,00      X64                0,00      0,00                          NaN    
+3  NaN  22.04.2024  ARAUJO_F012  19:21:39  SM30   SAPMSVMA  new   BR   MG  SP  21.0  0.0  ...  08.04.2021  30.04.2024    12,00    100,00      X64                0,00      0,00                          NaN    
+4  NaN  22.04.2024  ARAUJO_F012  19:22:14  SM30   SAPMSVMA  Old   BR   MG  SP  21.0  0.0  ...  08.04.2021  31.12.9999    12,00    100,00      X64                0,00      0,00                          NaN    
+
+[5 rows x 26 columns]
+Estrutura do arquivo C:\Users\disna\Downloads\Email003Attach001_J_1BTXIC3.TXT:
+    0           1            2         3      4         5     6    7   8   9     10   11  ...          14          15        16        17 18   19         20        21        22          23          24  25    
+0  NaN  22.04.2024  ARAUJO_F012  19:21:04  SM30   SAPMSVMA  Old   BR   MG  SP  21.0  0.0  ...  08.04.2021  31.12.9999    12,00    100,00      X64                0,00      0,00                          NaN    
+1  NaN  22.04.2024  ARAUJO_F012  19:21:04  SM30   SAPMSVMA  new   BR   MG  SP  21.0  0.0  ...  08.04.2021  30.04.2024    12,00    100,00      X64                0,00      0,00                          NaN    
+2  NaN  22.04.2024  ARAUJO_F012  19:21:39  SM30   SAPMSVMA  Old   BR   MG  SP  21.0  0.0  ...  08.04.2021  31.12.9999    12,00    100,00      X64                0,00      0,00                          NaN    
+3  NaN  22.04.2024  ARAUJO_F012  19:21:39  SM30   SAPMSVMA  new   BR   MG  SP  21.0  0.0  ...  08.04.2021  30.04.2024    12,00    100,00      X64                0,00      0,00                          NaN    
+4  NaN  22.04.2024  ARAUJO_F012  19:22:14  SM30   SAPMSVMA  Old   BR   MG  SP  21.0  0.0  ...  08.04.2021  31.12.9999    12,00    100,00      X64                0,00      0,00                          NaN    
+
+[5 rows x 26 columns]

@@ -19,15 +19,24 @@ def main():
         print("Nenhum arquivo .txt encontrado.")
         return
 
-    # Cabeçalho das colunas
-    colunas = ["Date", "User Name", "Time", "TCode", "Program", "Type", "Ctr", "SF", "ST", "TG", "DK", "Key", "Dynamic key", "Valid from", "Valid to", "Tax Rate", "Tax base", "O", "Txt", "Conv. 100", "FCP Rate", "FCP Base", "Part Exemp", "FCP Resale"]
-
     # Lê cada arquivo TXT e adiciona à lista de DataFrames
     for arquivo in arquivos_txt:
         try:
-            # Lê o arquivo, ignorando as primeiras 4 linhas e sem usar a primeira coluna como índice
-            df = pd.read_csv(arquivo, delimiter='|', encoding='utf-8', skiprows=4, header=None, usecols=range(1, 25))
-            df.columns = colunas  # Definindo os nomes das colunas
+            # Verifica se o arquivo tem um cabeçalho adequado usando o delimitador correto
+            with open(arquivo, 'r', encoding='utf-8') as file:
+                lines = file.readlines()
+            # Pula as linhas até encontrar uma linha não vazia para determinar o cabeçalho
+            skip_lines = 0
+            for line in lines:
+                if line.strip() and '|' in line:
+                    break
+                skip_lines += 1
+
+            df = pd.read_csv(arquivo, delimiter='|', encoding='utf-8', skiprows=skip_lines, header=0)
+            # Verifica se a primeira coluna é totalmente NaN e a remove se for o caso
+            if df.columns[0].startswith('Unnamed'):
+                df = df.iloc[:, 1:]
+            df.dropna(how='all', inplace=True)
             print(f"Arquivo lido com {len(df)} linhas e {len(df.columns)} colunas: {arquivo}")
             dataframes.append(df)
         except pd.errors.ParserError as e:
