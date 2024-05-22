@@ -50,7 +50,7 @@ def main():
     # Salva o DataFrame final em um arquivo Excel
     if not df_final.empty:
         agora = datetime.now()
-        nome_arquivo = agora.strftime('%Y%m%d_%H%M%S') + '_dados_combinados.xlsx'
+        nome_arquivo = agora.strftime('DD_%Y%m%d_%H%M%S') + '_dados_combinados.xlsx'
         caminho_excel = os.path.join(pasta_downloads, nome_arquivo)
         df_final.to_excel(caminho_excel, index=False)
         print(f"Arquivo Excel criado com sucesso: {caminho_excel}")
